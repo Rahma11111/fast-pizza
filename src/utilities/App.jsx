@@ -9,23 +9,29 @@ import Order, { loader as orderloader } from "../features/order/Order";
 import Applayout from "../ui/Applayout";
 import Error from "../ui/Error";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      element: <Applayout />,
+      errorElement: <Error />,
+      children: [
+        { path: "/", element: <Home /> },
+        { path: "/menu", element: <Menu />, loader: menuloader },
+        { path: "/cart", element: <Cart /> },
+        {
+          path: "/order/new",
+          element: <CreateOrder />,
+          action: createOrderAction,
+        },
+        { path: "/order/:orderId", element: <Order />, loader: orderloader },
+      ],
+    },
+  ],
   {
-    element: <Applayout />,
-    errorElement: <Error />,
-    children: [
-      { path: "/", element: <Home /> },
-      { path: "/menu", element: <Menu />, loader: menuloader },
-      { path: "/cart", element: <Cart /> },
-      {
-        path: "/order/new",
-        element: <CreateOrder />,
-        action: createOrderAction,
-      },
-      { path: "/order/:orderId", element: <Order />, loader: orderloader },
-    ],
-  },
-]);
+    basename: "/fast-pizza", // 👈 ده أهم سطر
+  }
+);
+
 function App() {
   return <RouterProvider router={router} />;
 }
